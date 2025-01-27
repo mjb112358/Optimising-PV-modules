@@ -50,7 +50,7 @@ DNI = 2103
 ratio = DHI / DNI
 
 # Path to the CSV file
-file_path = '/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/GSA_Report_Aznalcázar.csv'
+file_path = '......./GSA_Report_Aznalcázar.csv'
 
 # Read the CSV file, using the first row as headers and first column as the time of day
 irradiance_data = pd.read_csv(file_path, header=0)
@@ -79,8 +79,8 @@ for hour in range(24):
             dhi_20min.loc[time_20min] = irradiance_data.iloc[hour] * ratio + (irradiance_data.iloc[next_hour] - irradiance_data.iloc[hour]) * ratio * 2 / 3
 
 # Save the DNI and DHI matrices to new CSV files
-dni_20min.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/DNI_Matrix_20min.csv', index_label='Time')
-dhi_20min.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/DHI_Matrix_20min.csv', index_label='Time')
+dni_20min.to_csv('......./Production Model/DNI_Matrix_20min.csv', index_label='Time')
+dhi_20min.to_csv('......./Production Model/DHI_Matrix_20min.csv', index_label='Time')
 
 print("DNI and DHI matrices with 20-minute intervals have been saved.")
 
@@ -89,7 +89,7 @@ print("DNI and DHI matrices with 20-minute intervals have been saved.")
 # ---------------------------------------------------------------------
 
 # Load the data from the CSV file
-file_path = '/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/SunEarthTools_AnnualSunPath_2024_1719555204504.csv'
+file_path = '......./SunEarthTools_AnnualSunPath_2024_1719555204504.csv'
 data = pd.read_csv(file_path, delimiter=';')
 
 # Rename the first column for clarity
@@ -132,8 +132,8 @@ elevation_avg.index = elevation_avg.index.str.replace('E ', '')
 azimuth_avg.index = azimuth_avg.index.str.replace('A ', '')
 
 # Save the results to CSV files
-elevation_avg.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Average_Elevation_Angles.csv')
-azimuth_avg.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Average_Azimuth_Angles.csv')
+elevation_avg.to_csv('......./Average_Elevation_Angles.csv')
+azimuth_avg.to_csv('......./Average_Azimuth_Angles.csv')
 
 print("Average Elevation Angles by Month and Time saved to 'Average_Elevation_Angles.csv'")
 print("Average Azimuth Angles by Month and Time saved to 'Average_Azimuth_Angles.csv'")
@@ -152,7 +152,7 @@ def conditional_cosine(azimuth_angle):
 azimuth_cos = azimuth_avg.applymap(conditional_cosine)
 
 # Save the resulting DataFrame to a new CSV file
-azimuth_cos.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Cos_Azimuth_Angles.csv')
+azimuth_cos.to_csv('......./Cos_Azimuth_Angles.csv')
 
 print("Cosine of Average Azimuth Angles by Month and Time saved to 'Cos_Azimuth_Angles.csv'")
 
@@ -237,13 +237,13 @@ def elevation_efficiency(elevation_angle, reference_angle_EL, tolerance_EL):
 for tolerance in tolerance_values:
     efficiency_matrix = azimuth_avg.applymap(lambda azimuth_angle: azimuth_efficiency(azimuth_angle, reference_angle, tolerance))
     efficiency_matrix.index = efficiency_matrix.index.str.replace('A ', '')  # Remove 'A ' from index
-    efficiency_matrix.to_csv(f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Efficiency_Matrix_Azimuth_Tolerance_{tolerance}.csv')
+    efficiency_matrix.to_csv(f'......./Efficiency_Matrix_Azimuth_Tolerance_{tolerance}.csv')
 
 # Create efficiency matrices for each tolerance value (elevation) and save them to CSV
 for tolerance_EL in tolerance_values_EL:
     efficiency_matrix = elevation_avg.applymap(lambda elevation_angle: elevation_efficiency(elevation_angle, reference_angle_EL, tolerance_EL))
     efficiency_matrix.index = efficiency_matrix.index.str.replace('E ', '')  # Remove 'E ' from index
-    efficiency_matrix.to_csv(f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Efficiency_Matrix_Elevation_Tolerance_{tolerance_EL}.csv')
+    efficiency_matrix.to_csv(f'......./Efficiency_Matrix_Elevation_Tolerance_{tolerance_EL}.csv')
 
 print("Efficiency matrices for azimuth and elevation saved to CSV files.")
 
@@ -253,8 +253,8 @@ print("Efficiency matrices for azimuth and elevation saved to CSV files.")
 
 def multiply_matrices(tolerance_azimuth, tolerance_elevation):
     # Load the data from the CSV files
-    df_azimuth = pd.read_csv(f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Efficiency_Matrix_Azimuth_Tolerance_{tolerance_azimuth}.csv', index_col=0)
-    df_elevation = pd.read_csv(f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Efficiency_Matrix_Elevation_Tolerance_{tolerance_elevation}.csv', index_col=0)
+    df_azimuth = pd.read_csv(f'......./Efficiency_Matrix_Azimuth_Tolerance_{tolerance_azimuth}.csv', index_col=0)
+    df_elevation = pd.read_csv(f'......./Efficiency_Matrix_Elevation_Tolerance_{tolerance_elevation}.csv', index_col=0)
     
     # Multiply the dataframes element-wise
     df_result = df_azimuth.mul(df_elevation)
@@ -267,7 +267,7 @@ for tolerance_azimuth in tolerance_values:
         try:
             result = multiply_matrices(tolerance_azimuth, tolerance_elevation)
             # Save the result to a CSV file
-            result.to_csv(f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Result_Azimuth_{tolerance_azimuth}_Elevation_{tolerance_elevation}.csv')
+            result.to_csv(f'......./Production Model/Result_Azimuth_{tolerance_azimuth}_Elevation_{tolerance_elevation}.csv')
         except FileNotFoundError as e:
             print(f"File not found for tolerance_azimuth={tolerance_azimuth}, tolerance_elevation={tolerance_elevation}: {e}")
         except Exception as e:
@@ -300,7 +300,7 @@ df[['Cr', 'D']] = pd.DataFrame(df['Cr_D'].tolist(), index=df.index)
 df = df.drop(columns=['Cr_D'])
 
 # Save the DataFrame to a CSV file
-df.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/coverage_ratios.csv', index=False)
+df.to_csv('......./Production Model/coverage_ratios.csv', index=False)
 
 # Print the reference_angle_EL
 print(f"Reference Angle EL: {reference_angle_EL}")
@@ -364,12 +364,12 @@ def load_matrix(file_path):
         print(f"Error loading {file_path}: {e}")
         return None
 
-dhi_matrix = load_matrix('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/DHI_Matrix_20min.csv')
-dni_matrix = load_matrix('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/DNI_Matrix_20min.csv')
-cos_azimuth_matrix = load_matrix('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Cos_Azimuth_Angles.csv')
+dhi_matrix = load_matrix('......./Production Model/DHI_Matrix_20min.csv')
+dni_matrix = load_matrix('......./DNI_Matrix_20min.csv')
+cos_azimuth_matrix = load_matrix('......./Cos_Azimuth_Angles.csv')
 
 # Load coverage ratios and inspect the DataFrame, skipping the first row
-coverage_ratio_df = pd.read_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/coverage_ratios.csv')
+coverage_ratio_df = pd.read_csv('......./coverage_ratios.csv')
 print("Coverage Ratio DataFrame:")
 print(coverage_ratio_df.head())  # Print the first few rows to inspect
 
@@ -389,7 +389,7 @@ elevation_values = range(11)
 for azimuth in tolerance_values:
     azimuth_index = tolerance_values.index(azimuth)
     for elevation in elevation_values:
-        file_path = f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Result_Azimuth_{azimuth}_Elevation_{elevation}.csv'
+        file_path = f'......./Result_Azimuth_{azimuth}_Elevation_{elevation}.csv'
         result_matrix = load_matrix(file_path)
         
         if result_matrix is None:
@@ -398,7 +398,7 @@ for azimuth in tolerance_values:
         
         try:
             power_output_matrix = calculate_output_power(dni_matrix, dhi_matrix, result_matrix, cos_azimuth_matrix)
-            output_file_path = f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Power_Output_Azimuth_{azimuth}_Elevation_{elevation}.csv'
+            output_file_path = f'......./Power_Output_Azimuth_{azimuth}_Elevation_{elevation}.csv'
             pd.DataFrame(power_output_matrix).to_csv(output_file_path, header=None, index=None)
         except Exception as e:
             print(f"An error occurred while calculating power output for azimuth {azimuth} and elevation {elevation}: {e}")
@@ -431,7 +431,7 @@ def calculate_total_power(tolerance_values, coverage_ratios_file):
             coverage_ratio = coverage_ratios.get(key, 0)  # Use a default value of 0 if the key is not found
 
             # Load the power output matrix from the CSV file
-            file_path = f'/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/Power_Output_Azimuth_{tolerance}_Elevation_{tolerance_EL}.csv'
+            file_path = f'......./Power_Output_Azimuth_{tolerance}_Elevation_{tolerance_EL}.csv'
             power_output_matrix = pd.read_csv(file_path, header=None).values
 
             # Sum all the values in the matrix
@@ -451,13 +451,13 @@ def calculate_total_power(tolerance_values, coverage_ratios_file):
     return total_power_outputs
 
 
-coverage_ratios_file = '/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/coverage_ratios.csv'
+coverage_ratios_file = '......./coverage_ratios.csv'
 
 total_power_outputs = calculate_total_power(tolerance_values, coverage_ratios_file)
 
 # Convert the list to a DataFrame and save it to a CSV file
 total_power_outputs_df = pd.DataFrame(total_power_outputs, columns=['Tolerance', 'Total Power Output', 'Coverage Ratio', 'kWp', 'kWh/kWp'])
-total_power_outputs_df.to_csv('/Users/maxbernheim/Desktop/PDM/PDM_Max_Bernheim_296937/Production Model/total_power_outputs.csv', index=False)
+total_power_outputs_df.to_csv('......./total_power_outputs.csv', index=False)
 
 # Find the row with the maximum power output
 max_power_output_row = total_power_outputs_df.loc[total_power_outputs_df['Total Power Output'].idxmax()]
